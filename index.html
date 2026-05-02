@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vores Bryllup | Julie & Jonas</title>
+    
+    <!-- Google Fonts for moderne typografi -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome til navigationsikoner -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+    /* 1. VARIABLER & BASE SETUP */
+    :root {
+        --bg-color: #F7F5F0;
+        --section-alt: #EBE6DF;
+        --text-dark: #4A433E;
+        --earth-accent: #9B8D82;
+        --lavender: #BDB2D0;
+        --lavender-dark: #9F90BA;
+        --transition: all 0.3s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--text-dark);
+        background-color: var(--bg-color);
+        line-height: 1.6;
+        padding-bottom: 120px;
+    }
+
+    /* 2. TYPOGRAFI & ANIMATION */
+    h1, h2, h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    h1, h2 {
+        opacity: 0; /* Forberedt til JS animation */
+    }
+
+    .animate-in {
+        animation: fadeInUp 1s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 2px;
+        background-color: var(--lavender);
+        margin: 15px auto 0 auto;
+    }
+
+    p {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 20px auto;
+        font-weight: 300;
+    }
+
+    /* 3. LAYOUT KOMPONENTER */
+    section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 20px;
+    }
+
+    .alt-bg { background-color: var(--section-alt); }
+
+/* Sørg for at sektioner kun fylder det indholdet kræver, hvis de er små */
+#toastmaster, #wishlist, #rsvp {
+    min-height: auto;
+    padding: 80px 20px; /* Giver god luft i top og bund i stedet for 100vh */
+}
+
+    .info-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .info-box {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        flex: 1;
+        min-width: 320px;
+        max-width: 500px;
+        text-align: center;
+        transition: var(--transition);
+        /* Forhindrer boksene i at strække sig vertikalt på store skærme */
+        #toastmaster .info-box, 
+        #wishlist .info-box, 
+        #rsvp .info-box {
+        flex: none; 
+        height: auto;
+}
+    }
+
+    .info-box i {
+        font-size: 2rem;
+        color: var(--lavender);
+        margin-bottom: 15px;
+    }
+
+    /* 4. EKSTRA ELEMENTER (MAP, IFRAME, BUTTON) */
+    .map-container, .iframe-container {
+        width: 100%;
+        margin: 20px auto;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid var(--section-alt);
+    }
+
+    .map-container {
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border: 3px solid white;
+        filter: grayscale(20%) sepia(10%);
+    }
+
+    iframe { display: block; border: none; }
+
+    .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 30px;
+        background-color: var(--lavender);
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: var(--transition);
+        box-shadow: 0 4px 10px rgba(189, 178, 208, 0.4);
+    }
+
+    .btn:hover {
+        background-color: var(--lavender-dark);
+        transform: translateY(-2px);
+    }
+
+    /* 5. NAVIGATION */
+    .floating-nav {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        display: flex;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
+    .floating-nav a {
+        color: var(--earth-accent);
+        text-decoration: none;
+        font-size: 1.2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        transition: var(--transition);
+    }
+
+    .floating-nav a:hover {
+        color: var(--lavender-dark);
+        background-color: rgba(189, 178, 208, 0.1);
+    }
+
+    .floating-nav a.active {
+        background-color: var(--lavender);
+        color: white;
+    }
+
+    /* 6. MEDIA QUERIES (SAMLING AF ALT RESPONSIVT) */
+    @media (max-width: 768px) {
+        #home h1 { font-size: 3rem; }
+        h2 { font-size: 2rem; }
+        
+        .info-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-box {
+            width: 100%;
+            min-width: unset;
+        }
+
+        .floating-nav {
+            width: 90%;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .floating-nav a {
+            width: 45px;
+            height: 45px;
+        }
+    }
+
+    #rsvp .btn {
+    background-color: var(--lavender);
+    color: white;
+    width: 100%; /* Gør knappen lidt mere markant i boksen */
+    max-width: 250px;
+}
+
+#rsvp .btn:hover {
+    background-color: var(--lavender-dark);
+    transform: scale(1.05); /* En lille diskret animation */
+}
+
+    /* Hero Specifik */
+    #home h1 { font-size: 4rem; margin-bottom: 10px; }
+    #home .date {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        color: var(--earth-accent);
+        text-transform: uppercase;
+    }
+
+    #home {
+    background-image: url('images/hero.jpeg'); /* Erstat med dit eget billede */
+    background-size: cover;      /* Sørger for at billedet udfylder hele sektionen */
+    background-position: bottom; /* Holder fokus på midten af billedet */
+    background-repeat: no-repeat;
+    width: 100%;
+}
+</style>
+</head>
+<body>
+
+    <!-- Sektion 1: Velkomst -->
+    <section id="home">
+        <h1>Julie & Jonas</h1>
+        <div class="date">23. Oktober 2027</div>
+        <p style="margin-top: 20px;">Vi glæder os til at fejre kærligheden med jer!</p>
+    </section>
+
+
+
+<!-- Sektion 2: Praktisk Info med Flex-container -->
+<section id="info" class="alt-bg">
+    <h2>Praktisk Info</h2>
+    
+    <!-- Denne div holder nu de to bokse -->
+    <div class="info-container">
+        <!-- Boks 1: Vielsen -->
+        <div class="info-box">
+            <i class="fa-solid fa-church"></i>
+            <h3>Vielsen</h3>
+            <p>Kl. 13:00 i Ansgar Kirke<br>Sdr. Boulevard 1, 5000 Odense</p>
+            
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d648.2378450586135!2d10.37763443985772!3d55.391447820575316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464cdff13dd83fd9%3A0x924469bb14bd9368!2sAnsgars%20Kirke!5e1!3m2!1sda!2sdk!4v1777722943350!5m2!1sda!2sdk"
+                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+            <a href="https://maps.app.goo.gl/Ksq9kYTupr4k7Ex27" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
+        </div>
+
+        <!-- Boks 2: Festen -->
+        <div class="info-box">
+            <i class="fa-solid fa-champagne-glasses"></i>
+            <h3>Festen</h3>
+            <p>Kl. 16:00 ved Rådhussalen<br>Bystævnet 21, 5792 Årslev</p>
+            
+            <div class="map-container">
+                <!-- Indsæt evt. et kort mere her til festlokationen -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2342.37529379464!2d10.44816899209351!3d55.29873620309459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464d27135c1d54df%3A0x639f1815b1cfee24!2sR%C3%A5dhussalen!5e1!3m2!1sda!2sdk!4v1777723819661!5m2!1sda!2sdk"
+                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+            <a href="https://maps.app.goo.gl/rtyB1LcxRXLhUThG8" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
+        </div>
+    </div>
+</section>
+
+    <!-- Sektion 3: Toastmaster -->
+    <section id="toastmaster">
+        <h2>Toastmaster</h2>
+        <p>Vi er så heldige at have Tim Timsen som vores toastmaster.</p>
+        <div class="info-box">
+            <i class="fa-solid fa-microphone-lines"></i>
+            <h3>Taler & Indslag</h3>
+            <p>Ønsker du at holde en tale eller lave et indslag, bedes du kontakte Tim i god tid.</p>
+            <p><strong>Telefon:</strong> 12 34 56 78<br><strong>Email:</strong> tim@mail.dk</p>
+        </div>
+    </section>
+
+    <!-- Sektion 4: Ønskeseddel -->
+    <section id="wishlist" class="alt-bg">
+        <h2>Ønsker</h2>
+        <p>Vi har samlet vores ønsker på Ønskeskyen. Listen vil løbende blive opdateret frem mod brylluppet.</p>
+        
+        <!-- Info-box gjort lidt bredere for at gøre plads til indlejringen -->
+        <div class="info-box" style="max-width: 800px;">
+            <i class="fa-solid fa-gift"></i>
+            <h3>Vores Ønskesky</h3>
+            
+
+            <!-- Her er indlejringen
+            <div class="iframe-container">
+                <iframe src="https://onskeskyen.dk/s/eqhzn2" width="100%" height="450px" style="border:none;" title="Vores Ønskesky"></iframe>
+            </div> -->
+            
+            <!-- Sikkerhedsknappen hvis iframen blokeres -->
+            <p style="margin-top: 20px; font-size: 0.9rem;">Vises listen ikke korrekt ovenfor?</p>
+            <a href="https://onskeskyen.dk/s/eqhz96" target="_blank" rel="noopener noreferrer" class="btn">Åbn Ønskeskyen</a>
+        </div>
+    </section>
+
+<!-- Sektion 5: S.U. (RSVP) -->
+<section id="rsvp">
+    <h2>S.U.</h2>
+    <p>Vi håber meget på at se jer til vores store dag!</p>
+    <div class="info-box">
+        <i class="fa-solid fa-envelope-open-text"></i>
+        <h3>Giv os besked</h3>
+        <p>Svar venligst senest den 1. maj 2027 på mail eller telefon.</p>
+        <p>Husk at oplyse om eventuelle allergier, så kokken kan tage hensyn.</p>
+        <p>
+            <strong>Julie:</strong> <a href="tel:+4550561270">5056 1270</a><br>
+            <strong>Jonas:</strong> <a href="tel:+4553632036">5363 2036</a>
+        </p>
+        
+        <!-- Save the Date flyttet hertil -->
+        <div style="margin-top: 25px; border-top: 1px solid var(--section-alt); padding-top: 20px;">
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Glem ikke at reservere dagen i din kalender:</p>
+            <a href="#" id="addToCalendar" class="btn">Save the Date</a>
+        </div>
+    </div>
+</section>
+
+  <!-- Flydende Menu i Bunden (Opdateret) -->
+    <nav class="floating-nav">
+        <a href="#home" class="nav-link active"><i class="fa-solid fa-heart"></i></a>
+        <a href="#info" class="nav-link"><i class="fa-solid fa-location-dot"></i></a>
+        <a href="#toastmaster" class="nav-link"><i class="fa-solid fa-microphone"></i></a>
+        <a href="#wishlist" class="nav-link"><i class="fa-solid fa-gift"></i></a>
+        <a href="#rsvp" class="nav-link"><i class="fa-solid fa-envelope"></i></a>
+    </nav>
+
+    <!-- JavaScript til at håndtere aktivt ikon i menuen når man scroller -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const headers = document.querySelectorAll("h1, h2");
+
+    // 1. Scroll-spy til navigationsikoner
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => link.classList.remove("active"));
+                const id = entry.target.getAttribute("id");
+                const activeLink = document.querySelector(`.floating-nav a[href="#${id}"]`);
+                if (activeLink) activeLink.classList.add("active");
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach(section => navObserver.observe(section));
+
+    // 2. Animation til overskrifter (h1 og h2)
+    const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("animate-in");
+                // Stop med at observere elementet når det først er vist
+                animObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 }); // Trigger når 20% af overskriften er synlig
+
+    headers.forEach(header => animObserver.observe(header));
+});
+
+document.getElementById('addToCalendar').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    // Kalender-data (Her kan du rette detaljerne)
+    const event = {
+        title: "Bryllup: Julie & Jonas",
+        location: "Ansgar Kirke, Sdr. Boulevard 1, 5000 Odense",
+        description: "Vi glæder os til at se jer til vores bryllup! Husk at tjekke hjemmesiden for praktisk info.",
+        startDate: "20271023T130000", // Format: ÅÅÅÅMMDDTttmmss
+        endDate: "20271024T020000"   // Slutter kl. 02 om natten
+    };
+
+    // Opbygning af .ics fil-formatet
+    const icsMsg = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Vores Bryllup//DA
+BEGIN:VEVENT
+UID:${Date.now()}@voresbryllup.dk
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+DTSTART:${event.startDate}
+DTEND:${event.endDate}
+SUMMARY:${event.title}
+LOCATION:${event.location}
+DESCRIPTION:${event.description}
+END:VEVENT
+END:VCALENDAR`;
+
+    // Lav en usynlig download-link og klik på det
+    const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'bryllup-julie-jonas.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+    </script>
+</body>
+</html>
