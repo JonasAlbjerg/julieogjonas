@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vores Bryllup | Julie & Jonas</title>
     
-    <!-- Google Fonts for moderne typografi -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome til navigationsikoner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -38,7 +36,7 @@
         color: var(--text-dark);
         background-color: var(--bg-color);
         line-height: 1.6;
-        padding-bottom: 120px;
+        padding-bottom: 140px;
     }
 
     /* 2. TYPOGRAFI & ANIMATION */
@@ -95,11 +93,11 @@
 
     .alt-bg { background-color: var(--section-alt); }
 
-/* Sørg for at sektioner kun fylder det indholdet kræver, hvis de er små */
-#toastmaster, #wishlist, #rsvp {
-    min-height: auto;
-    padding: 80px 20px; /* Giver god luft i top og bund i stedet for 100vh */
-}
+    /* Forhindrer unødvendig whitespace på store monitorskærme */
+    #toastmaster, #wishlist, #rsvp {
+        min-height: auto;
+        padding: 80px 20px;
+    }
 
     .info-container {
         display: flex;
@@ -121,13 +119,15 @@
         max-width: 500px;
         text-align: center;
         transition: var(--transition);
-        /* Forhindrer boksene i at strække sig vertikalt på store skærme */
-        #toastmaster .info-box, 
-        #wishlist .info-box, 
-        #rsvp .info-box {
+    }
+
+    /* Sørger for at boksene i enkeltstående sektioner slutter tæt om indholdet */
+    #toastmaster .info-box, 
+    #wishlist .info-box, 
+    #rsvp .info-box {
         flex: none; 
         height: auto;
-}
+        width: 100%;
     }
 
     .info-box i {
@@ -165,6 +165,11 @@
         font-weight: 500;
         transition: var(--transition);
         box-shadow: 0 4px 10px rgba(189, 178, 208, 0.4);
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
+        text-align: center;
     }
 
     .btn:hover {
@@ -211,7 +216,165 @@
         color: white;
     }
 
-    /* 6. MEDIA QUERIES (SAMLING AF ALT RESPONSIVT) */
+    /* 6. RSVP FORMULAR STYLING */
+    #id-validation-box {
+        margin-bottom: 25px;
+    }
+
+    #id-validation-box label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .id-input-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    #guest-id {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--earth-accent);
+        text-transform: uppercase;
+        width: 150px;
+        text-align: center;
+        font-family: inherit;
+        font-size: 1rem;
+    }
+
+    #btn-verify {
+        margin-top: 0;
+        padding: 10px 25px;
+        border-radius: 5px;
+    }
+
+    #validation-msg {
+        font-size: 0.9rem;
+        margin-top: 10px;
+        display: none;
+        font-weight: 500;
+    }
+
+    #rsvp-form {
+        display: none; /* Skjult indtil ID verificeres */
+        text-align: left;
+        margin-top: 25px;
+        border-top: 1px solid var(--section-alt);
+        padding-top: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-family: inherit;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+    }
+
+    .form-group textarea {
+        height: 80px;
+        resize: vertical;
+    }
+
+    .form-divider {
+        margin-top: 30px;
+        border-top: 1px solid var(--section-alt);
+        padding-top: 20px;
+    }
+
+    #rsvp .btn-submit {
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+
+    #rsvp .btn-save-date {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    /* Opdatering til RSVP infoboks bredde */
+#rsvp .info-box {
+    max-width: 600px;
+}
+
+/* Styling til den nye succesbesked */
+#success-msg {
+    display: none; /* Skjult som standard */
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    border: 2px solid var(--lavender);
+    border-radius: 5px;
+    background-color: #FAF9F6;
+}
+
+#success-msg i {
+    color: var(--lavender);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+#success-msg h3 {
+    margin-bottom: 10px;
+}
+
+#success-msg p {
+    margin-bottom: 0;
+}
+
+    /* 7. HERO SPECIFIK MED OVERLAY */
+    #home {
+        background: linear-gradient(
+            rgba(74, 67, 62, 0.45), 
+            rgba(74, 67, 62, 0.45)
+        ), 
+        url('images/hero.jpeg');
+        background-size: cover;      
+        background-position: center; 
+        background-repeat: no-repeat;
+        width: 100%;
+        color: white;
+    }
+
+    #home h1 { 
+        font-size: 4rem; 
+        margin-bottom: 10px; 
+        color: white;
+    }
+
+    #home .date {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        color: #F7F5F0;
+        text-transform: uppercase;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #home p {
+        color: white;
+        font-weight: 400;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* 8. MEDIA QUERIES */
     @media (max-width: 768px) {
         #home h1 { font-size: 3rem; }
         h2 { font-size: 2rem; }
@@ -237,88 +400,49 @@
             height: 45px;
         }
     }
-
-    #rsvp .btn {
-    background-color: var(--lavender);
-    color: white;
-    width: 100%; /* Gør knappen lidt mere markant i boksen */
-    max-width: 250px;
-}
-
-#rsvp .btn:hover {
-    background-color: var(--lavender-dark);
-    transform: scale(1.05); /* En lille diskret animation */
-}
-
-    /* Hero Specifik */
-    #home h1 { font-size: 4rem; margin-bottom: 10px; }
-    #home .date {
-        font-size: 1.5rem;
-        letter-spacing: 2px;
-        color: var(--earth-accent);
-        text-transform: uppercase;
-    }
-
-    #home {
-    background-image: url('images/hero.jpeg'); /* Erstat med dit eget billede */
-    background-size: cover;      /* Sørger for at billedet udfylder hele sektionen */
-    background-position: bottom; /* Holder fokus på midten af billedet */
-    background-repeat: no-repeat;
-    width: 100%;
-}
 </style>
 </head>
 <body>
 
-    <!-- Sektion 1: Velkomst -->
     <section id="home">
-        <h1>Julie & Jonas</h1>
+        <h1 class="animate-in">Julie & Jonas</h1>
         <div class="date">23. Oktober 2027</div>
         <p style="margin-top: 20px;">Vi glæder os til at fejre kærligheden med jer!</p>
     </section>
 
-
-
-<!-- Sektion 2: Praktisk Info med Flex-container -->
-<section id="info" class="alt-bg">
-    <h2>Praktisk Info</h2>
-    
-    <!-- Denne div holder nu de to bokse -->
-    <div class="info-container">
-        <!-- Boks 1: Vielsen -->
-        <div class="info-box">
-            <i class="fa-solid fa-church"></i>
-            <h3>Vielsen</h3>
-            <p>Kl. 13:00 i Ansgar Kirke<br>Sdr. Boulevard 1, 5000 Odense</p>
-            
-            <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d648.2378450586135!2d10.37763443985772!3d55.391447820575316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464cdff13dd83fd9%3A0x924469bb14bd9368!2sAnsgars%20Kirke!5e1!3m2!1sda!2sdk!4v1777722943350!5m2!1sda!2sdk"
-                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
-                </iframe>
+    <section id="info" class="alt-bg">
+        <h2>Praktisk Info</h2>
+        <div class="info-container">
+            <div class="info-box">
+                <i class="fa-solid fa-church"></i>
+                <h3>Vielsen</h3>
+                <p>Kl. 13:00 i Ansgar Kirke<br>Sdr. Boulevard 1, 5000 Odense</p>
+                
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d648.2378450586135!2d10.37763443985772!3d55.391447820575316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464cdff13dd83fd9%3A0x924469bb14bd9368!2sAnsgars%20Kirke!5e1!3m2!1sda!2sdk!4v1777722943350!5m2!1sda!2sdk"
+                        width="100%" height="250" loading="lazy">
+                    </iframe>
+                </div>
+                <a href="https://maps.app.goo.gl/Ksq9kYTupr4k7Ex27" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
             </div>
-            <a href="https://maps.app.goo.gl/Ksq9kYTupr4k7Ex27" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
-        </div>
 
-        <!-- Boks 2: Festen -->
-        <div class="info-box">
-            <i class="fa-solid fa-champagne-glasses"></i>
-            <h3>Festen</h3>
-            <p>Kl. 16:00 ved Rådhussalen<br>Bystævnet 21, 5792 Årslev</p>
-            
-            <div class="map-container">
-                <!-- Indsæt evt. et kort mere her til festlokationen -->
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2342.37529379464!2d10.44816899209351!3d55.29873620309459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464d27135c1d54df%3A0x639f1815b1cfee24!2sR%C3%A5dhussalen!5e1!3m2!1sda!2sdk!4v1777723819661!5m2!1sda!2sdk"
-                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
-                </iframe>
+            <div class="info-box">
+                <i class="fa-solid fa-champagne-glasses"></i>
+                <h3>Festen</h3>
+                <p>Kl. 16:00 ved Rådhussalen<br>Bystævnet 21, 5792 Årslev</p>
+                
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2342.37529379464!2d10.44816899209351!3d55.29873620309459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464d27135c1d54df%3A0x639f1815b1cfee24!2sR%C3%A5dhussalen!5e1!3m2!1sda!2sdk!4v1777723819661!5m2!1sda!2sdk"
+                        width="100%" height="250" loading="lazy">
+                    </iframe>
+                </div>
+                <a href="https://maps.app.goo.gl/rtyB1LcxRXLhUThG8" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
             </div>
-            <a href="https://maps.app.goo.gl/rtyB1LcxRXLhUThG8" target="_blank" rel="noopener" class="btn" style="font-size: 0.8rem; padding: 8px 20px;">Rutevejledning</a>
         </div>
-    </div>
-</section>
+    </section>
 
-    <!-- Sektion 3: Toastmaster -->
     <section id="toastmaster">
         <h2>Toastmaster</h2>
         <p>Vi er så heldige at have Tim Timsen som vores toastmaster.</p>
@@ -330,51 +454,83 @@
         </div>
     </section>
 
-    <!-- Sektion 4: Ønskeseddel -->
     <section id="wishlist" class="alt-bg">
         <h2>Ønsker</h2>
         <p>Vi har samlet vores ønsker på Ønskeskyen. Listen vil løbende blive opdateret frem mod brylluppet.</p>
-        
-        <!-- Info-box gjort lidt bredere for at gøre plads til indlejringen -->
         <div class="info-box" style="max-width: 800px;">
             <i class="fa-solid fa-gift"></i>
             <h3>Vores Ønskesky</h3>
-            
-
-            <!-- Her er indlejringen
-            <div class="iframe-container">
-                <iframe src="https://onskeskyen.dk/s/eqhzn2" width="100%" height="450px" style="border:none;" title="Vores Ønskesky"></iframe>
-            </div> -->
-            
-            <!-- Sikkerhedsknappen hvis iframen blokeres -->
             <p style="margin-top: 20px; font-size: 0.9rem;">Vises listen ikke korrekt ovenfor?</p>
             <a href="https://onskeskyen.dk/s/eqhz96" target="_blank" rel="noopener noreferrer" class="btn">Åbn Ønskeskyen</a>
         </div>
     </section>
 
-<!-- Sektion 5: S.U. (RSVP) -->
-<section id="rsvp">
+ <section id="rsvp">
     <h2>S.U.</h2>
-    <p>Vi håber meget på at se jer til vores store dag!</p>
+    <p>Udfyld formularen herunder for at give os besked om i kan komme.</p>
     <div class="info-box">
         <i class="fa-solid fa-envelope-open-text"></i>
-        <h3>Giv os besked</h3>
-        <p>Svar venligst senest den 1. maj 2027 på mail eller telefon.</p>
-        <p>Husk at oplyse om eventuelle allergier, så kokken kan tage hensyn.</p>
-        <p>
-            <strong>Julie:</strong> <a href="tel:+4550561270">5056 1270</a><br>
-            <strong>Jonas:</strong> <a href="tel:+4553632036">5363 2036</a>
-        </p>
+        <h3>Tilmeld dig her</h3>
         
-        <!-- Save the Date flyttet hertil -->
-        <div style="margin-top: 25px; border-top: 1px solid var(--section-alt); padding-top: 20px;">
-            <p style="font-size: 0.9rem; margin-bottom: 10px;">Glem ikke at reservere dagen i din kalender:</p>
-            <a href="#" id="addToCalendar" class="btn">Save the Date</a>
+        <div id="id-validation-box">
+            <label for="guest-id">Indtast dit personlige ID fra invitationen:</label>
+            <div class="id-input-group">
+                <input type="text" id="guest-id" placeholder="F.eks. J93B">
+                <button type="button" id="btn-verify" class="btn">Verificer</button>
+            </div>
+            <p id="validation-msg"></p>
+        </div>
+
+        <form id="rsvp-form" action="https://formspree.io/f/mlgvvyqn" method="POST">
+            
+            <input type="hidden" id="form-guest-id" name="Gæst ID">
+
+            <div class="form-group">
+                <label>Navne på deltagere *</label>
+                <input type="text" name="Navne" required>
+            </div>
+
+            <div class="form-group">
+                <label>Antal deltagere *</label>
+                <select name="Antal" required>
+                    <option value="1">1 person</option>
+                    <option value="2" selected>2 personer</option>
+                    <option value="3">3 personer</option>
+                    <option value="4">4 personer</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>E-mailadresse (til bekræftelse) *</label>
+                <input type="email" name="Email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Allergier eller diæter (valgfrit)</label>
+                <textarea name="Allergier" placeholder="F.eks. nøddeallergi, vegetar, gluten..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Hvilken sang kan få dig på dansegulvet?</label>
+                <input type="text" name="Musikønske" placeholder="Artist - Sangtitel">
+            </div>
+
+            <button type="submit" class="btn btn-submit">Send tilmelding</button>
+        </form>
+
+        <div id="success-msg">
+            <i class="fa-solid fa-heart"></i>
+            <h3>Tusind tak for jeres svar!</h3>
+            <p>Vi har modtaget din tilmelding, og glæder os til at se jer til brylluppet 💜</p>
+        </div>
+        
+        <div class="form-divider">
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Husk også at gemme datoen i din kalender:</p>
+            <a href="#" id="addToCalendar" class="btn btn-save-date">Save the Date</a>
         </div>
     </div>
 </section>
 
-  <!-- Flydende Menu i Bunden (Opdateret) -->
     <nav class="floating-nav">
         <a href="#home" class="nav-link active"><i class="fa-solid fa-heart"></i></a>
         <a href="#info" class="nav-link"><i class="fa-solid fa-location-dot"></i></a>
@@ -383,55 +539,147 @@
         <a href="#rsvp" class="nav-link"><i class="fa-solid fa-envelope"></i></a>
     </nav>
 
-    <!-- JavaScript til at håndtere aktivt ikon i menuen når man scroller -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-    const sections = document.querySelectorAll("section");
-    const navLinks = document.querySelectorAll(".nav-link");
-    const headers = document.querySelectorAll("h1, h2");
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+        const headers = document.querySelectorAll("h1, h2");
 
-    // 1. Scroll-spy til navigationsikoner
-    const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                navLinks.forEach(link => link.classList.remove("active"));
-                const id = entry.target.getAttribute("id");
-                const activeLink = document.querySelector(`.floating-nav a[href="#${id}"]`);
-                if (activeLink) activeLink.classList.add("active");
-            }
-        });
-    }, { threshold: 0.5 });
+        // 1. Scroll-spy til navigationsikoner
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove("active"));
+                    const id = entry.target.getAttribute("id");
+                    const activeLink = document.querySelector(`.floating-nav a[href="#${id}"]`);
+                    if (activeLink) activeLink.classList.add("active");
+                }
+            });
+        }, { threshold: 0.4 });
 
-    sections.forEach(section => navObserver.observe(section));
+        sections.forEach(section => navObserver.observe(section));
 
-    // 2. Animation til overskrifter (h1 og h2)
-    const animObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("animate-in");
-                // Stop med at observere elementet når det først er vist
-                animObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 }); // Trigger når 20% af overskriften er synlig
+        // 2. Animation til overskrifter (h1 og h2)
+        const animObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animate-in");
+                    animObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
 
-    headers.forEach(header => animObserver.observe(header));
-});
+        headers.forEach(header => animObserver.observe(header));
+    });
 
-document.getElementById('addToCalendar').addEventListener('click', function(e) {
-    e.preventDefault();
+    // 3. ID Verificeringssystem til gæstelisten
+    const guestList = {
+        "I93V": "Lotte & Frank 💃🕺",
+        "M12X": "Emilie Schrøder 💃",
+        "T77P": "Daniel Schrøder 🕺",
+        "S45K": "Lone & Lars 💃🕺",
+        "A88Z": "Toke & Ines 🕺💃",
+        "R22Y": "Bjørn & Yiyi 🕺💃",
+        "K56L": "Ole & Gitte 🕺💃",
+        "N34Q": "Nini & Victor 💃🕺",
+        "E11W": "Sarah & Anton 💃🕺",
+        "H78V": "Johanne & Snorre 💃🕺",
+        "C09D": "Federica & Simone 💃🕺",
+        "F66G": "Clara & Jonas 💃🕺",
+        "L44M": "Lene, Per og Julie 💃🕺💃",
+        "P55N": "Bente & Bjarne 💃🕺",
+        "G33R": "Poul & Joan 🕺💃",
+        "D99S": "Lars & Tina 🕺💃",
+        "V77T": "Amalie & Mikkel 💃🕺",
+        "Q88U": "Frederik & Nanna 🕺💃",
+        "W22V": "Nils, Anita, Sara & Nikolaj 🕺💃💃🕺",
+        "B11C": "Jørn, Nini & Mathias 🕺💃🕺",
+        "Y66X": "Markus & Mille 🕺💃",
+        "Z55Y": "Kristoffer 🕺",
+        "U44Z": "Nicolaj 🕺",
+        "U87Q": "Mathias 🕺",
+        "M23P": "Mette 💃",
+        "V04T": "Amalie 💃",
+        "F39X": "Mille 💃",
 
-    // Kalender-data (Her kan du rette detaljerne)
-    const event = {
-        title: "Bryllup: Julie & Jonas",
-        location: "Ansgar Kirke, Sdr. Boulevard 1, 5000 Odense",
-        description: "Vi glæder os til at se jer til vores bryllup! Husk at tjekke hjemmesiden for praktisk info.",
-        startDate: "20271023T130000", // Format: ÅÅÅÅMMDDTttmmss
-        endDate: "20271024T020000"   // Slutter kl. 02 om natten
     };
 
-    // Opbygning af .ics fil-formatet
-    const icsMsg = `BEGIN:VCALENDAR
+    document.getElementById('btn-verify').addEventListener('click', function() {
+        const inputId = document.getElementById('guest-id').value.trim().toUpperCase();
+        const msgElement = document.getElementById('validation-msg');
+        const formElement = document.getElementById('rsvp-form');
+        const hiddenIdInput = document.getElementById('form-guest-id');
+
+        if (guestList[inputId]) {
+            msgElement.style.color = "green";
+            msgElement.innerHTML = `✓ ID godkendt! Velkommen ${guestList[inputId]}.`;
+            msgElement.style.display = "block";
+            
+            hiddenIdInput.value = `${inputId} (${guestList[inputId]})`;
+            formElement.style.display = "block";
+            document.getElementById('id-validation-box').style.opacity = "0.6";
+        } else {
+            msgElement.style.color = "red";
+            msgElement.innerHTML = "❌ Ukendt ID. Prøv lige at tjekke invitationen igen.";
+            msgElement.style.display = "block";
+            formElement.style.display = "none";
+        }
+    });
+
+    document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Forhindrer Formspree i at omdirigere siden
+    
+    const form = this;
+    const data = new FormData(form);
+    const button = form.querySelector('.btn-submit');
+    const successMsg = document.getElementById('success-msg');
+    
+    // Indikerer overfor gæsten at data sendes
+    button.innerText = "Sender tilmelding...";
+    button.disabled = true;
+    
+    // Sender data afsted i baggrunden via AJAX (fetch)
+    fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            // Succes: Skjul formularen og vis den personlige bekræftelse
+            form.style.display = 'none';
+            successMsg.style.display = 'block';
+            
+            // Justerer fokus så beskeden er synlig med det samme
+            successMsg.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // Fejlhåndtering hvis Formspree fejler
+            alert("Der opstod en fejl under afsendelsen. Prøv venligst igen.");
+            button.innerText = "Send tilmelding";
+            button.disabled = false;
+        }
+    }).catch(error => {
+        // Fejlhåndtering hvis netværksforbindelsen svigter
+        alert("Netværksfejl. Tjek din internetforbindelse og prøv igen.");
+        button.innerText = "Send tilmelding";
+        button.disabled = false;
+    });
+});
+
+    // 4. Save the Date (.ics kalender download)
+    document.getElementById('addToCalendar').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const event = {
+            title: "Bryllup: Julie & Jonas",
+            location: "Ansgar Kirke, Sdr. Boulevard 1, 5000 Odense",
+            description: "Vi glæder os til at se jer til vores bryllup! Husk at tjekke hjemmesiden for praktisk info.",
+            startDate: "20271023T130000", 
+            endDate: "20271024T020000"   
+        };
+
+        const icsMsg = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Vores Bryllup//DA
 BEGIN:VEVENT
@@ -445,16 +693,15 @@ DESCRIPTION:${event.description}
 END:VEVENT
 END:VCALENDAR`;
 
-    // Lav en usynlig download-link og klik på det
-    const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'bryllup-julie-jonas.ics');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
+        const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'bryllup-julie-jonas.ics');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
     </script>
 </body>
 </html>
