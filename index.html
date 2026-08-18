@@ -547,52 +547,139 @@
         <a href="it.html" class="lang-switch" title="Cambia lingua in Italiano">IT</a>
     </nav>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const sections = document.querySelectorAll("section");
-        const navLinks = document.querySelectorAll(".nav-link");
-        const headers = document.querySelectorAll("h1, h2");
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const headers = document.querySelectorAll("h1, h2");
 
-        // 1. Scroll-spy til navigationsikoner
-        const navObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach(link => link.classList.remove("active"));
-                    const id = entry.target.getAttribute("id");
-                    const activeLink = document.querySelector(`.floating-nav a[href="#${id}"]`);
-                    if (activeLink) activeLink.classList.add("active");
-                }
-            });
-        }, { threshold: 0.4 });
+    // 1. Scroll-spy til navigationsikoner
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => link.classList.remove("active"));
+                const id = entry.target.getAttribute("id");
+                const activeLink = document.querySelector(`.floating-nav a[href="#${id}"]`);
+                if (activeLink) activeLink.classList.add("active");
+            }
+        });
+    }, { threshold: 0.4 });
 
-        sections.forEach(section => navObserver.observe(section));
+    sections.forEach(section => navObserver.observe(section));
 
-        // 2. Animation til overskrifter (h1 og h2)
-        const animObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("animate-in");
-                    animObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
+    // 2. Animation til overskrifter (h1 og h2)
+    const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("animate-in");
+                animObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
 
-        headers.forEach(header => animObserver.observe(header));
+    headers.forEach(header => animObserver.observe(header));
+});
+
+// 3. ID Verificeringssystem (spørger MySQL-databasen via Simply.com)
+document.getElementById('btn-verify').addEventListener('click', function() {
+    const inputId = document.getElementById('guest-id').value.trim().toUpperCase();
+    const msgElement = document.getElementById('validation-msg');
+    const formElement = document.getElementById('rsvp-form');
+    const hiddenIdInput = document.getElementById('form-guest-id');
+
+    if (!inputId) {
+        msgElement.style.color = "red";
+        msgElement.innerHTML = "Indtast venligst et ID.";
+        msgElement.style.display = "block";
+        return;
+    }
+
+    // Vis status mens der tjekkes
+    msgElement.style.color = "#666";
+    msgElement.innerHTML = "Tjekker ID...";
+    msgElement.style.display = "block";
+
+    // Foretag opslag mod verify.php på Simply.com
+    fetch('https://jonasalbjerg.dk/verify.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: inputId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            msgElement.style.color = "green";
+            msgElement.innerHTML = `✓ ID godkendt! Velkommen ${data.name}.`;
+            msgElement.style.display = "block";
+            
+            hiddenIdInput.value = `${inputId} (${data.name})`;
+            formElement.style.display = "block";
+            document.getElementById('id-validation-box').style.opacity = "0.6";
+        } else {
+            msgElement.style.color = "red";
+            msgElement.innerHTML = "❌ Ukendt ID. Prøv lige at tjekke invitationen igen.";
+            msgElement.style.display = "block";
+            formElement.style.display = "none";
+        }
+    })
+    .catch(error => {
+        console.error('Fejl:', error);
+        msgElement.style.color = "red";
+        msgElement.innerHTML = "Der opstod en netværksfejl. Prøv igen senere.";
+        msgElement.style.display = "block";
     });
+});
 
-    // 4. Save the Date (.ics kalender download)
-    document.getElementById('addToCalendar').addEventListener('click', function(e) {
-        e.preventDefault();
+// 4. Formspree formular-afsendelse
+document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const data = new FormData(form);
+    const button = form.querySelector('.btn-submit');
+    const successMsg = document.getElementById('success-msg');
+    
+    button.innerText = "Sender tilmelding...";
+    button.disabled = true;
+    
+    fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            form.style.display = 'none';
+            successMsg.style.display = 'block';
+            successMsg.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert("Der opstod en fejl under afsendelsen. Prøv venligst igen.");
+            button.innerText = "Send tilmelding";
+            button.disabled = false;
+        }
+    }).catch(error => {
+        alert("Netværksfejl. Tjek din internetforbindelse og prøv igen.");
+        button.innerText = "Send tilmelding";
+        button.disabled = false;
+    });
+});
 
-        const event = {
-            title: "Bryllup: Julie & Jonas",
-            location: "Ansgar Kirke, Sdr. Boulevard 1, 5000 Odense",
-            description: "Vi glæder os til at se jer til vores bryllup! Husk at tjekke hjemmesiden for praktisk info.",
-            startDate: "20271023T140000", 
-            endDate: "20271024T020000"   
-        };
+// 5. Save the Date (.ics kalender download)
+document.getElementById('addToCalendar').addEventListener('click', function(e) {
+    e.preventDefault();
 
-        const icsMsg = `BEGIN:VCALENDAR
+    const event = {
+        title: "Bryllup: Julie & Jonas",
+        location: "Ansgar Kirke, Sdr. Boulevard 1, 5000 Odense",
+        description: "Vi glæder os til at se jer til vores bryllup! Husk at tjekke hjemmesiden for praktisk info.",
+        startDate: "20271023T140000", 
+        endDate: "20271024T020000"   
+    };
+
+    const icsMsg = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Vores Bryllup//DA
 BEGIN:VEVENT
@@ -606,15 +693,16 @@ DESCRIPTION:${event.description}
 END:VEVENT
 END:VCALENDAR`;
 
-        const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'bryllup-julie-jonas.ics');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
-    </script>
+    const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'bryllup-julie-jonas.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+</script>
+
 </body>
 </html>
